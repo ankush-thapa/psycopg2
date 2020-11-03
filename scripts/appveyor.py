@@ -17,6 +17,7 @@ import subprocess as sp
 from glob import glob
 from pathlib import Path
 from zipfile import ZipFile
+from argparse import ArgumentParser
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 
@@ -78,8 +79,6 @@ def setup_build_env():
 
 def python_info():
     logger.info("Python Information")
-    # NOMERGE: exploring available Python version. Remove before merging.
-    run_command(["dir", "C:\\"])
     run_python(['--version'], stderr=sp.STDOUT)
     run_python(
         ['-c', "import sys; print('64bit: %s' % (sys.maxsize > 2**32))"]
@@ -478,7 +477,7 @@ def print_sha1_hashes():
     logger.info("artifacts SHA1 hashes:")
 
     os.chdir(opt.package_dir / 'dist')
-    run_command([which('sha1sum'), '-b', f'psycopg2-*/*'])
+    run_command([which('sha1sum'), '-b', 'psycopg2-*/*'])
 
 
 def setup_ssh():
@@ -767,8 +766,8 @@ class Options:
         """
         if self.vs_ver == '16.0':
             path = Path(
-                    r"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
-                    )
+                r"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build"
+            )
         else:
             path = Path(
                 r"C:\Program Files (x86)\Microsoft Visual Studio %s\VC"
@@ -858,8 +857,6 @@ class Options:
 
 
 def parse_cmdline():
-    from argparse import ArgumentParser
-
     parser = ArgumentParser(description=__doc__)
 
     g = parser.add_mutually_exclusive_group()
